@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>KPR Entry Gate</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+:root {
+  --bg:      #080a0e;
+  --surface: #0f1318;
+  --card:    #141923;
+  --border:  #1e2836;
+  --accent:  #f59e0b;
+  --accent2: #fbbf24;
+  --green:   #22c55e;
+  --red:     #ef4444;
+  --blue:    #38bdf8;
+  --text:    #e8edf5;
+  --muted:   #5a6a80;
+  --mono:    'Share Tech Mono', monospace;
+  --display: 'Rajdhani', sans-serif;
+  --body:    'Exo 2', sans-serif;
+}
+
+html, body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Animated grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(245,158,11,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245,158,11,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Radial glow */
+body::after {
+  content: '';
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 500px;
+  background: radial-gradient(ellipse at center, rgba(245,158,11,0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── HEADER ── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8,10,14,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hdr-left { display:flex; align-items:center; gap:12px; }
+
+.hdr-icon {
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, var(--accent), #f97316);
+  border-radius: 12px;
+  display: flex; align-items:center; justify-content:center;
+  font-size: 20px;
+  box-shadow: 0 0 20px rgba(245,158,11,0.4);
+  flex-shrink: 0;
+}
+
+.hdr-brand { font-family: var(--display); line-height: 1.2; }
+.hdr-brand .name { font-size:18px; font-weight:700; color:var(--accent); letter-spacing:2px; }
+.hdr-brand .sub  { font-size:9px; color:var(--muted); letter-spacing:2.5px; text-transform:uppercase; }
+
+.hdr-right { text-align:right; }
+.hdr-clock-time { font-family:var(--mono); font-size:17px; color:var(--accent); font-weight:bold; }
+.hdr-clock-date { font-size:9px; color:var(--muted); font-family:var(--mono); }
+.hdr-badge {
+  font-size:9px; font-family:var(--mono); margin-top:2px;
+  display:inline-flex; align-items:center; gap:4px;
+}
+.hdr-badge .dot { width:6px; height:6px; border-radius:50%; display:inline-block; }
+
+/* ── MAIN ── */
+.main {
+  position: relative;
+  z-index: 1;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 20px 16px 60px;
+}
+
+/* Gate Banner */
+.gate-banner {
+  background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(251,191,36,0.06));
+  border: 1px solid rgba(245,158,11,0.3);
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.gate-banner::before {
+  content: '';
+  position: absolute;
+  top: -20px; right: -20px;
+  width: 100px; height: 100px;
+  background: radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%);
+}
+.gate-banner .gb-left .lbl { font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+.gate-banner .gb-left .val { font-family:var(--mono); font-size:36px; font-weight:bold; color:var(--accent); line-height:1; }
+.gate-banner .gb-right { font-size:52px; opacity:0.25; }
+
+/* Card */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.4;
+}
+
+.card-title {
+  font-family: var(--display);
+  font-size: 13px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+  display: flex; align-items:center; gap:8px;
+}
+
+/* Form groups */
+.fg { margin-bottom: 16px; }
+
+label {
+  display: block;
+  font-size: 9px; font-weight:600;
+  letter-spacing:2.5px; text-transform:uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="number"],
+input[type="date"] {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(245,158,11,0.12);
+}
+input::placeholder { color: var(--muted); font-size:14px; }
+
+input[type="date"] {
+  font-family: var(--mono);
+  font-weight:600;
+  color: var(--accent);
+  cursor: pointer;
+  background: linear-gradient(135deg, rgba(245,158,11,0.05), rgba(245,158,11,0.02));
+  border-color: rgba(245,158,11,0.3);
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor:pointer; filter:invert(1) brightness(0.7); opacity:0.6;
+  font-size:16px; padding:4px; border-radius:6px;
+}
+
+input[type="time"] {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 1px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 13px 16px;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+input[type="time"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245,158,11,0.12); }
+
+.inp-lorry {
+  font-family: var(--mono) !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  letter-spacing: 3px !important;
+  color: var(--accent) !important;
+  text-transform: uppercase;
+}
+
+.time-hint {
+  font-size: 10px;
+  color: #3a4a60;
+  margin-top: 5px;
+  font-family: var(--mono);
+}
+
+/* Lorry Autocomplete */
+.ac-wrap { position:relative; }
+#lorryDropdown {
+  display:none; position:absolute; left:0; right:0; top:calc(100% + 6px);
+  background:#1a2132; border:1.5px solid var(--accent);
+  border-radius:14px; overflow:hidden; z-index:300;
+  box-shadow:0 8px 32px rgba(0,0,0,0.6); max-height:280px; overflow-y:auto;
+}
+.ac-item { padding:12px 16px; border-bottom:1px solid var(--border); cursor:pointer; transition:background 0.12s; }
+.ac-item:last-child { border-bottom:none; }
+.ac-item:active, .ac-item:hover { background:rgba(245,158,11,0.08); }
+.ac-top { display:flex; align-items:center; gap:8px; margin-bottom:3px; }
+.ac-lorry { font-family:var(--mono); font-size:16px; font-weight:bold; color:var(--accent); letter-spacing:2px; flex:1; }
+.ac-sub { font-size:12px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ac-badge { font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:3px 8px; border-radius:20px; flex-shrink:0; }
+.ac-badge-in  { background:rgba(34,197,94,0.15); color:var(--green); border:1px solid rgba(34,197,94,0.3); }
+.ac-badge-out { background:rgba(239,68,68,0.12); color:var(--red);   border:1px solid rgba(239,68,68,0.25); }
+#acFillBadge {
+  display:none; margin-top:7px;
+  background:rgba(34,197,94,0.10); border:1px solid rgba(34,197,94,0.28);
+  border-radius:10px; padding:8px 14px;
+  font-size:11px; color:var(--green);
+  font-family:var(--mono); letter-spacing:0.3px;
+}
+
+/* Buttons */
+.btn {
+  width:100%; padding:16px;
+  border:none; border-radius:14px;
+  font-family:var(--display); font-size:16px; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase;
+  cursor:pointer; transition:all 0.15s;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  margin-bottom:10px;
+}
+.btn:last-child { margin-bottom:0; }
+.btn:active { transform:scale(0.97); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #f97316);
+  color:#000; box-shadow:0 4px 24px rgba(245,158,11,0.35);
+}
+.btn-primary:hover { box-shadow:0 6px 28px rgba(245,158,11,0.5); }
+.btn-ghost {
+  background:var(--surface); border:1.5px solid var(--border); color:var(--text);
+}
+
+/* Toast notifications */
+.notify-wrap {
+  position:fixed; top:74px; left:12px; right:12px; z-index:999;
+  pointer-events:none; display:flex; flex-direction:column; gap:8px;
+  max-width:520px; margin:0 auto;
+}
+.toast {
+  background:var(--card); border:1px solid var(--border); border-radius:12px;
+  padding:12px 16px; font-size:13px;
+  display:flex; align-items:center; gap:10px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.5);
+  animation:toastIn 0.3s ease; pointer-events:auto;
+}
+.toast.success { border-left:3px solid var(--green); }
+.toast.error   { border-left:3px solid var(--red); }
+.toast.info    { border-left:3px solid var(--blue); }
+.toast.warn    { border-left:3px solid var(--accent); }
+@keyframes toastIn { from{transform:translateY(-12px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+/* Receipt overlay */
+.receipt-ov {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.92);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  z-index:200; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  padding:16px; padding-bottom:calc(16px + env(safe-area-inset-bottom, 0px));
+}
+.receipt-ov.open { display:block; animation:fadeIn 0.2s ease; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+/* Thermal receipt */
+.th-receipt { background:#fff; color:#000; font-family:"Courier New",monospace; padding:16px; border-radius:8px; width:100%; max-width:320px; margin:0 auto 16px; }
+.th-header  { text-align:center; padding-bottom:6px; }
+.th-title   { font-size:16px; font-weight:bold; letter-spacing:1px; }
+.th-sub     { font-size:11px; margin-top:2px; color:#222; }
+.th-dash    { border-top:1px dashed #000; margin:6px 0; }
+.th-type    { text-align:center; font-weight:bold; font-size:13px; padding:4px 0; }
+.th-table   { width:100%; font-size:12px; border-collapse:collapse; }
+.th-table td { padding:3px 4px; vertical-align:top; color:#000; }
+.th-table td:first-child { white-space:nowrap; font-weight:bold; width:100px; }
+.th-note    { font-size:10px; line-height:1.7; padding:4px 2px; color:#333; }
+.th-footer  { text-align:center; font-weight:bold; font-size:12px; padding:6px 0; letter-spacing:1px; }
+
+.rcpt-btns { display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:320px; margin:0 auto; }
+.rcpt-full { grid-column:1 / -1; }
+.btn-wa { background:linear-gradient(135deg,#25D366,#128C7E); color:#fff; font-size:14px; }
+.btn-wa-text { background:rgba(37,211,102,0.08); border:1.5px solid rgba(37,211,102,0.35); color:#25D366; font-size:14px; }
+.btn-sm { width:auto; padding:12px 16px; font-size:13px; border-radius:10px; margin:0; width:100%; }
+
+/* Status stats */
+.status-bar {
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap:10px; margin-bottom:20px;
+}
+.stat-pill {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:12px; text-align:center;
+  position:relative; overflow:hidden;
+}
+.stat-pill::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+.sp-g::before { background:var(--green); }
+.sp-y::before { background:var(--accent); }
+.sp-b::before { background:var(--blue); }
+.sp-lbl { font-size:8px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+.sp-val { font-family:var(--mono); font-size:22px; font-weight:bold; }
+.sp-g .sp-val { color:var(--green); }
+.sp-y .sp-val { color:var(--accent); }
+.sp-b .sp-val { color:var(--blue); }
+
+/* Online badge */
+.online-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:9px; font-family:var(--mono); letter-spacing:1px;
+  margin-top:2px;
+}
+</style>
+</head>
+<body>
+
+<div class="notify-wrap" id="notifyWrap"></div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="hdr-left">
+    <div class="hdr-icon">🚛</div>
+    <div class="hdr-brand">
+      <div class="name">KPR TRANSPORT</div>
+      <div class="sub">Entry Gate</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-clock-time" id="clockTime">--:--</div>
+    <div class="hdr-clock-date" id="clockDate">---</div>
+    <div class="online-badge" id="onlineBadge">
+      <span class="dot" id="dotEl" style="background:#f59e0b"></span>
+      <span id="badgeText">Connecting…</span>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- STATS -->
+  <div class="status-bar">
+    <div class="stat-pill sp-g">
+      <div class="sp-lbl">Parked</div>
+      <div class="sp-val" id="s-parked">—</div>
+    </div>
+    <div class="stat-pill sp-y">
+      <div class="sp-lbl">Today In</div>
+      <div class="sp-val" id="s-today">—</div>
+    </div>
+    <div class="stat-pill sp-b">
+      <div class="sp-lbl">Next #</div>
+      <div class="sp-val" id="s-next">—</div>
+    </div>
+  </div>
+
+  <!-- GATE BANNER -->
+  <div class="gate-banner">
+    <div class="gb-left">
+      <div class="lbl">Next Serial No.</div>
+      <div class="val" id="nextToken">#—</div>
+    </div>
+    <div class="gb-right">🎫</div>
+  </div>
+
+  <!-- ENTRY FORM -->
+  <div class="card">
+    <div class="card-title">🚛 New Lorry Entry</div>
+
+    <div class="fg">
+      <label for="entryLorry">Lorry / Vehicle Number *</label>
+      <div class="ac-wrap">
+        <input type="text" id="entryLorry" class="inp-lorry" autocomplete="off" autocorrect="off" spellcheck="false"
+          placeholder="AP12AB1234"
+          oninput="this.value=this.value.toUpperCase(); lorryAutocomplete(this.value)"
+          onblur="setTimeout(hideLorryDropdown, 180)"
+          onfocus="lorryAutocomplete(this.value)">
+        <div id="lorryDropdown"></div>
+      </div>
+      <div id="acFillBadge"></div>
+    </div>
+
+    <div class="fg">
+      <label for="entryDateInput">Entry Date * 📅</label>
+      <input type="date" id="entryDateInput" title="Entry date">
+      <div class="time-hint">Auto-filled with today · tap to change</div>
+    </div>
+
+    <div class="fg">
+      <label>Entry Time * 🕐</label>
+      <input type="time" id="entryTimeInput" title="Entry time">
+      <div class="time-hint">Live time auto-fills · tap to set manually</div>
+    </div>
+
+    <div class="fg">
+      <label>Driver Name (Optional)</label>
+      <input type="text" id="entryDriver" autocomplete="name" placeholder="Enter driver name">
+    </div>
+
+    <div class="fg">
+      <label>Driver Phone (Optional)</label>
+      <input type="tel" id="entryPhone" maxlength="15" autocomplete="tel" placeholder="e.g. 9876543210">
+    </div>
+
+    <div class="fg">
+      <label>Remarks (Optional)</label>
+      <input type="text" id="entryRemarks" placeholder="Any notes…">
+    </div>
+
+    <button class="btn btn-primary" onclick="recordEntry()" id="submitBtn">
+      🎫 Record Entry
+    </button>
+    <button class="btn btn-ghost" onclick="clearEntry()">✕ Clear Form</button>
+  </div>
+
+</div>
+
+<!-- RECEIPT OVERLAY -->
+<div class="receipt-ov" id="receiptOv">
+  <div id="receiptContent"></div>
+  <div class="rcpt-btns">
+    <button class="btn btn-wa btn-sm rcpt-full" onclick="shareWhatsApp()">
+      💬 Share via WhatsApp
+    </button>
+    <button class="btn btn-ghost btn-sm" onclick="document.getElementById('receiptOv').classList.remove('open')">✕ Close</button>
+    <button class="btn btn-primary btn-sm" onclick="printReceipt()">🖨 Print Again</button>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────
+const API          = 'https://parking-management-system-lynr.onrender.com/api';
+const PRINT_SECRET = 'KPR2024SECRET';
+
+// ── STATE ─────────────────────────────────────────────────────
+let db = [];
+let dailyRate = 130;
+let backendOnline = false;
+let _isSubmitting = false;
+let _acTimer = null;
+let entryTimeManual = false;
+let entryDateManual = false;
+let _lastReceiptData = null;
+
+// ── API ───────────────────────────────────────────────────────
+async function apiFetch(path, opts = {}) {
+  const res = await fetch(API + path, {
+    ...opts,
+    headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) }
+  });
+  const json = await res.json();
+  if (!json.ok) throw new Error(json.error || 'API error');
+  return json;
+}
+
+// ── CLOCK ─────────────────────────────────────────────────────
+function tick() {
+  const now = new Date();
+  document.getElementById('clockTime').textContent =
+    now.toLocaleTimeString('en-IN', { hour12: true, timeZone: 'Asia/Kolkata' });
+  document.getElementById('clockDate').textContent =
+    now.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric', timeZone:'Asia/Kolkata' });
+}
+setInterval(tick, 1000); tick();
+
+// ── IST HELPERS ───────────────────────────────────────────────
+function _istParts(date) {
+  const fmt = new Intl.DateTimeFormat('en-CA', {
+    timeZone:'Asia/Kolkata', year:'numeric', month:'2-digit', day:'2-digit',
+    hour:'2-digit', minute:'2-digit', hour12:false
+  });
+  const p = Object.fromEntries(fmt.formatToParts(date).map(x => [x.type, x.value]));
+  return { year:p.year, month:p.month, day:p.day,
+    hours: p.hour === '24' ? '00' : p.hour, minutes:p.minute };
+}
+function localDateStr() { const p=_istParts(new Date()); return `${p.year}-${p.month}-${p.day}`; }
+function liveTime24()   { const p=_istParts(new Date()); return `${p.hours}:${p.minutes}`; }
+
+function to12h(t24) {
+  if (!t24) return '';
+  const [h, m] = t24.split(':').map(Number);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const h12  = h % 12 || 12;
+  return `${String(h12).padStart(2,'0')}:${String(m).padStart(2,'0')} ${ampm}`;
+}
+
+function formatDate(dateStr) {
+  try {
+    const d = new Date(dateStr + 'T00:00:00+05:30');
+    return d.toLocaleDateString('en-IN', { day:'2-digit', month:'2-digit', year:'numeric', timeZone:'Asia/Kolkata' });
+  } catch(e) { return dateStr; }
+}
+
+// ── SYNC ──────────────────────────────────────────────────────
+async function syncFromServer() {
+  try {
+    const [records, settings] = await Promise.all([
+      apiFetch('/records?limit=2000'),
+      apiFetch('/settings')
+    ]);
+    db = records.data;
+    dailyRate = parseFloat(settings.data.hourly_rate) || 130;
+    backendOnline = true;
+    setOnlineStatus(true);
+    refreshUI();
+  } catch(_) {
+    backendOnline = false;
+    setOnlineStatus(false);
+  }
+}
+
+function setOnlineStatus(online) {
+  const dot  = document.getElementById('dotEl');
+  const text = document.getElementById('badgeText');
+  if (online) {
+    dot.style.background  = '#22c55e';
+    text.textContent = 'Live';
+  } else {
+    dot.style.background  = '#ef4444';
+    text.textContent = 'Offline';
+  }
+}
+
+function getNextToken() {
+  if (!db.length) return 1;
+  return Math.max(...db.map(r => r.token || 0)) + 1;
+}
+
+function refreshUI() {
+  const nxt = getNextToken();
+  const parked = db.filter(r => r.status === 'IN').length;
+  const today  = localDateStr();
+  const todayIn = db.filter(r => r.entryDate === today).length;
+  document.getElementById('nextToken').textContent = '#' + nxt;
+  document.getElementById('s-next').textContent    = '#' + nxt;
+  document.getElementById('s-parked').textContent  = parked;
+  document.getElementById('s-today').textContent   = todayIn;
+}
+
+// ── AUTOCOMPLETE ──────────────────────────────────────────────
+function lorryAutocomplete(val) {
+  const query = val.trim().toUpperCase();
+  hideLorryDropdown();
+  if (query.length < 2) return;
+  clearTimeout(_acTimer);
+  _acTimer = setTimeout(() => {
+    if (_isSubmitting) return;
+    const lorryMap = {};
+    db.forEach(r => {
+      if (!r.lorry.startsWith(query)) return;
+      const ex = lorryMap[r.lorry];
+      if (!ex || r.token > ex.token) lorryMap[r.lorry] = r;
+    });
+    const matches = Object.values(lorryMap).sort((a,b) => b.token - a.token).slice(0, 6);
+    if (!matches.length) return;
+    showLorryDropdown(matches);
+  }, 120);
+}
+
+function showLorryDropdown(matches) {
+  const dd = document.getElementById('lorryDropdown');
+  if (!dd) return;
+  dd.innerHTML = matches.map(r => {
+    const isParked = r.status === 'IN';
+    const badge = isParked
+      ? `<span class="ac-badge ac-badge-in">PARKED</span>`
+      : `<span class="ac-badge ac-badge-out">EXITED</span>`;
+    const driver = r.driver !== '--' ? r.driver : '—';
+    const phone  = r.phone  !== '--' ? r.phone  : '';
+    const sub    = phone ? `${driver} · ${phone}` : driver;
+    return `<div class="ac-item" onclick="selectLorry('${r.lorry}')">
+      <div class="ac-top"><span class="ac-lorry">${r.lorry}</span>${badge}</div>
+      <div class="ac-sub">${sub}</div>
+    </div>`;
+  }).join('');
+  dd.style.display = 'block';
+}
+
+function hideLorryDropdown() {
+  const dd = document.getElementById('lorryDropdown');
+  if (dd) { dd.style.display = 'none'; dd.innerHTML = ''; }
+}
+
+function selectLorry(lorry) {
+  if (_isSubmitting) return;
+  document.getElementById('entryLorry').value = lorry;
+  hideLorryDropdown();
+  const past = db.filter(r => r.lorry === lorry).sort((a,b) => b.token - a.token)[0];
+  if (!past) return;
+  const dEl = document.getElementById('entryDriver');
+  const pEl = document.getElementById('entryPhone');
+  const rEl = document.getElementById('entryRemarks');
+  if (dEl && !dEl.value.trim() && past.driver !== '--') dEl.value = past.driver;
+  if (pEl && !pEl.value.trim() && past.phone  !== '--') pEl.value = past.phone;
+  if (rEl && !rEl.value.trim() && past.remarks !== '--') rEl.value = past.remarks;
+  const fb = document.getElementById('acFillBadge');
+  if (fb) {
+    const visits = db.filter(r => r.lorry === lorry).length;
+    fb.textContent = `✔ Details loaded · ${visits} visit${visits !== 1 ? 's' : ''} on record`;
+    fb.style.display = 'block';
+    clearTimeout(fb._timer);
+    fb._timer = setTimeout(() => { fb.style.display = 'none'; }, 4000);
+  }
+  if (past.status === 'IN') notify(`⚠ ${lorry} is currently parked (Token #${past.token})`, 'warn');
+}
+
+// ── ENTRY ──────────────────────────────────────────────────────
+async function recordEntry() {
+  if (_isSubmitting) return;
+  _isSubmitting = true;
+  clearTimeout(_acTimer);
+  hideLorryDropdown();
+
+  const lorry = document.getElementById('entryLorry').value.trim().toUpperCase();
+  if (!lorry) { _isSubmitting = false; notify('Enter lorry number!', 'error'); return; }
+
+  const dup = db.find(r => r.lorry === lorry && r.status === 'IN');
+  if (dup) {
+    _isSubmitting = false;
+    notify(`⚠ ${lorry} already parked! Serial #${dup.token}`, 'error'); return;
+  }
+
+  const entryDate = document.getElementById('entryDateInput').value || localDateStr();
+  const entryTime = document.getElementById('entryTimeInput').value || liveTime24();
+
+  const payload = {
+    lorry,
+    driver:   document.getElementById('entryDriver').value.trim()  || '--',
+    phone:    document.getElementById('entryPhone').value.trim()   || '--',
+    remarks:  document.getElementById('entryRemarks').value.trim() || '--',
+    entryDate, entryTime
+  };
+
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = '⏳ Recording…';
+  btn.disabled = true;
+
+  let rec;
+  if (backendOnline) {
+    try {
+      const resp = await apiFetch('/records', { method:'POST', body:JSON.stringify(payload) });
+      rec = resp.data;
+      db.unshift(rec);
+    } catch(e) {
+      _isSubmitting = false;
+      btn.textContent = '🎫 Record Entry';
+      btn.disabled = false;
+      notify('Error: ' + e.message, 'error'); return;
+    }
+  } else {
+    _isSubmitting = false;
+    btn.textContent = '🎫 Record Entry';
+    btn.disabled = false;
+    notify('Cannot record — server is offline. Please retry.', 'error'); return;
+  }
+
+  refreshUI();
+  notify(`✅ Serial #${rec.token} — ${lorry} entered`, 'success');
+  showReceipt(rec, entryTime);
+  // Auto-send to thermal printer
+  sendToPrinter({
+    type:       'entry',
+    token:      String(rec.token),
+    lorry:      rec.lorry,
+    driver:     payload.driver  !== '--' ? payload.driver  : '',
+    phone:      payload.phone   !== '--' ? payload.phone   : '',
+    remarks:    payload.remarks !== '--' ? payload.remarks : '',
+    entry_date: formatDate(rec.entryDate),
+    entry_time: to12h(rec.entryTime || entryTime),
+    rate:       dailyRate
+  });
+  clearEntry();
+  btn.textContent = '🎫 Record Entry';
+  btn.disabled = false;
+  _isSubmitting = false;
+}
+
+function clearEntry() {
+  ['entryLorry','entryDriver','entryPhone','entryRemarks'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  entryDateManual = false; entryTimeManual = false;
+  document.getElementById('entryDateInput').value = localDateStr();
+  document.getElementById('entryTimeInput').value = liveTime24();
+  hideLorryDropdown();
+  const fb = document.getElementById('acFillBadge');
+  if (fb) fb.style.display = 'none';
+  _isSubmitting = false;
+}
+
+// ── RECEIPT ───────────────────────────────────────────────────
+function showReceipt(rec, entryTimeRaw) {
+  const timeStr    = to12h(rec.entryTime || entryTimeRaw || liveTime24());
+  const driverRow  = rec.driver !== '--' ? `<tr><td>Driver&nbsp;&nbsp;&nbsp;:</td><td>${rec.driver}</td></tr>` : '';
+  const mobileRow  = rec.phone  !== '--' ? `<tr><td>Mobile&nbsp;&nbsp;&nbsp;:</td><td>${rec.phone}</td></tr>`  : '';
+  const remarksRow = rec.remarks !== '--' ? `<tr><td colspan="2" style="padding-top:5px;font-size:11px;color:#555">${rec.remarks}</td></tr>` : '';
+
+  document.getElementById('receiptContent').innerHTML = `
+  <div class="th-receipt">
+    <div class="th-header">
+      <div class="th-title">KPR TRUCK PARKING</div>
+      <div class="th-sub">Beside DRK College, Bowrampet</div>
+      <div class="th-sub">Ph: 9640019275 | 8885519275</div>
+    </div>
+    <div class="th-dash"></div>
+    <div class="th-type">** ENTRY RECEIPT **</div>
+    <div class="th-dash"></div>
+    <table class="th-table">
+      <tr><td>Serial No&nbsp;:</td><td><b>#${rec.token}</b></td></tr>
+      <tr><td>Vehicle No:</td><td><b>${rec.lorry}</b></td></tr>
+      ${driverRow}${mobileRow}
+    </table>
+    <div class="th-dash"></div>
+    <table class="th-table">
+      <tr><td>Entry Date :</td><td>${formatDate(rec.entryDate)}</td></tr>
+      <tr><td>Entry Time :</td><td>${timeStr}</td></tr>
+      <tr><td>Per Day&nbsp;&nbsp;&nbsp;:</td><td><b>₹${dailyRate}</b></td></tr>
+      ${remarksRow}
+    </table>
+    <div class="th-dash"></div>
+    <div class="th-note">
+      <b>Note:</b><br>Management is not responsible<br>
+      for any loss, theft, or damage<br>to vehicle or its contents.
+    </div>
+    <div class="th-dash"></div>
+    <div class="th-footer">THANK YOU - DRIVE SAFE</div>
+  </div>`;
+
+  _lastReceiptData = {
+    token: rec.token, lorry: rec.lorry,
+    driver:  rec.driver  !== '--' ? rec.driver  : '',
+    phone:   rec.phone   !== '--' ? rec.phone   : '',
+    remarks: rec.remarks !== '--' ? rec.remarks : '',
+    entry_date: formatDate(rec.entryDate), entry_time: timeStr, rate: dailyRate
+  };
+  document.getElementById('receiptOv').classList.add('open');
+}
+
+// ── THERMAL PRINT QUEUE ───────────────────────────────────────
+async function sendToPrinter(data) {
+  try {
+    const resp = await fetch(`${API}/print-queue`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Print-Token': PRINT_SECRET
+      },
+      body: JSON.stringify(data),
+      signal: AbortSignal.timeout(8000)
+    });
+    if (resp.ok) {
+      notify('🖨 Print job sent to parking printer ✓', 'success');
+    } else {
+      notify('⚠ Printer error (' + resp.status + ')', 'warn');
+    }
+  } catch(err) {
+    notify('⚠ Could not reach printer', 'warn');
+  }
+}
+
+function printReceipt() {
+  if (!_lastReceiptData) { notify('No receipt to print', 'warn'); return; }
+  sendToPrinter({
+    type:       'entry',
+    token:      String(_lastReceiptData.token),
+    lorry:      _lastReceiptData.lorry,
+    driver:     _lastReceiptData.driver  || '',
+    phone:      _lastReceiptData.phone   || '',
+    remarks:    _lastReceiptData.remarks || '',
+    entry_date: _lastReceiptData.entry_date,
+    entry_time: _lastReceiptData.entry_time,
+    rate:       _lastReceiptData.rate
+  });
+}
+
+// ── WHATSAPP SHARE ────────────────────────────────────────────
+function shareWhatsApp() {
+  if (!_lastReceiptData) return;
+  const r = _lastReceiptData;
+  const rawPhone = (r.phone || '').replace(/\D/g, '');
+  const waPhone  = rawPhone.length === 10 ? '91' + rawPhone : rawPhone.length > 10 ? rawPhone : '';
+  const SEP = '-'.repeat(33);
+  let msg = '```\n';
+  msg += 'KPR TRUCK PARKING\n';
+  msg += SEP + '\n';
+  msg += ` Token  : #${r.token}\n`;
+  msg += `Vehicle : ${r.lorry}\n`;
+  if (r.driver) msg += `Driver  : ${r.driver}\n`;
+  if (r.phone)  msg += `Phone   : ${r.phone}\n`;
+  msg += SEP + '\n';
+  msg += `Entry   : ${r.entry_date}  ${r.entry_time}\n`;
+  msg += `Rate    : Rs.${r.rate}/day\n`;
+  msg += SEP + '\n';
+  msg += 'Amount billed on exit\n';
+  msg += SEP + '\n';
+  msg += 'Ph: 9640019275 | 8885519275\n';
+  msg += 'Beside DRK College, Bowrampet\n';
+  msg += '```';
+  const waUrl = waPhone
+    ? `https://wa.me/${waPhone}?text=${encodeURIComponent(msg)}`
+    : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+  window.open(waUrl, '_blank', 'noopener,noreferrer');
+}
+
+// ── NOTIFICATIONS ─────────────────────────────────────────────
+function notify(msg, type = 'info') {
+  const icons = { success:'✅', error:'❌', info:'ℹ️', warn:'⚠️' };
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span style="flex:1">${msg}</span>`;
+  document.getElementById('notifyWrap').appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
+// ── TICK FOR TIME INPUT ───────────────────────────────────────
+setInterval(() => {
+  if (!entryTimeManual) { const et = document.getElementById('entryTimeInput'); if(et) et.value = liveTime24(); }
+  if (!entryDateManual) { const ed = document.getElementById('entryDateInput'); if(ed) ed.value = localDateStr(); }
+}, 10000);
+
+// ── INIT ──────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('entryDateInput').value = localDateStr();
+  document.getElementById('entryTimeInput').value = liveTime24();
+
+  const ed = document.getElementById('entryDateInput');
+  const et = document.getElementById('entryTimeInput');
+  if (ed) { ed.addEventListener('focus', () => entryDateManual = true); ed.addEventListener('input', () => entryDateManual = true); }
+  if (et) { et.addEventListener('focus', () => entryTimeManual = true); et.addEventListener('input', () => entryTimeManual = true); }
+
+  syncFromServer();
+  setInterval(syncFromServer, 20000);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') syncFromServer(); });
+});
+</script>
+</body>
+</html>
